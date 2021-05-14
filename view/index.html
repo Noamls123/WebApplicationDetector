@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Anomaly Detection Server</title>
+    <link rel="stylesheet" href="./main.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        .res {
+            width: 60%;
+            float: left;
+            padding: 15px;
+            border: 1px solid white;
+        }
+        .dropTrain {
+            width: 20%;
+            float: left;
+            padding: 15px;
+            border: 1px solid white;
+        }
+        .dropAnomaly{
+            width: 20%;
+            float: left;
+            padding: 15px;
+            border: 1px solid white;
+        }
+        .mode {
+            width: 40%;
+            float: left;
+            padding: 15px;
+            border: 1px solid white;
+        }
+       </style>
+</head>
+<header>Anomaly Detection Server</header>
+
+<body>
+<br></br>
+
+
+<div class="res">
+<headerL>Result:</headerL>
+<br></br>
+
+<iframe name="result" width="90%" height="90%"></iframe>
+</div>
+
+<form action="/upload" method="POST" enctype="multipart/form-data" name="uploafFile" target="result">
+<div class="dropTrain">
+    <div class ="drop-zone">
+        <span class="drop-zone__prompt">Drop practice files here</span>
+        <input type="file" name="practiceFile" class="drop-zone__input">
+    </div>
+    </div>
+<div class="dropAnomaly">
+    <div class ="drop-zone">
+        <span class="drop-zone__prompt">Drop detection files here</span>
+        <input type="file" name="detectionFile" class="drop-zone__input">
+    </div>
+</div>
+    <br> </br>
+<div class="mode">
+    <label class="switch">
+            <input type="checkbox" name="reg" class="switch-input" >
+            <span class="switch-label" data-on="hybrid mode" data-off="regression mode"></span>
+            <span class="switch-handle"></span>
+        </label>
+    <br> </br>
+         <button class="send-button" onclick="send_upload()"> upload</button>
+    </div>
+</form>
+
+
+<script src="main.js"></script>
+</body>
+</html>
