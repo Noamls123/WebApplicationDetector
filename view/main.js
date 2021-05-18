@@ -23,7 +23,9 @@ document.querySelectorAll(".drop-zone__input").forEach(inputElement => {
     });
 });
 
+function send_upload(){
 
+}
 function updateThumbnail(dropZoneElement,file){
   let thumbnailElement=dropZoneElement.querySelector(".drop-zone__thumb");
 

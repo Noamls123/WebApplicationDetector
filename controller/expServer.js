@@ -25,9 +25,14 @@ app.post("/upload",(req,res)=>{
     }
     if(req.files){
         if(req.files.practiceFile&&req.files.detectionFile){
-        var trainFile = req.files.practiceFile
+            if(!req.files.detectionFile.name.includes(".csv")  || !req.files.practiceFile.name.includes(".csv")){
+                res.write("Invalid file selected, valid files are of .csv");
+                res.end()
+                return
+            }
+            var trainFile = req.files.practiceFile
         var detectFile = req.files.detectionFile
-        var result = model.getdetect(mode,trainFile.data.toString(),detectFile.data.toString())
+        var result = model.getDetect(mode,trainFile.data.toString(),detectFile.data.toString())
         res.write(result)
         }
     }
