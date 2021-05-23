@@ -11,3 +11,4 @@ class AnomalyReport{
     learnNormal(ts);
     detect(ts);
 };*/
+module.exports.ARConstructor=AnomalyReport

@@ -1,11 +1,4 @@
-//import {learnNormal} from "./SimpleAnomalyDetector"
-//let SimpleAnomalyDetector = function () { };
-
-//var path = require('path')
-//const simpleAnomaly = require(path.resolve(__dirname,'./SimpleAnomalyDetector.js'));
-//const HybridAnomaly = require(path.resolve(__dirname,'./HybridAnomalyDetector.js'));
-//const AnomalyReport = require(path.resolve(__dirname,'./AnomalyReport.js'))
-const simpleAnomaly = require('./SimpleAnomalyDetector')
+const simple = require('../model/SimpleAnomalyDetector')
 
 function getDetect(mode, train, anomalies){
     var result="here are the anomalies"
@@ -14,12 +7,11 @@ function getDetect(mode, train, anomalies){
     var timeSeriesAnomalies = new timeSeries(anomalies)
 
     if(mode == "Reg"){ //simple
-        var simple =simpleAnomaly.SimpleAnomalyDetector()
+        var sim =  new simple.cfConstructor()
+        simple.learnNormal(timeSeriesTrain,sim)
 
-        simple.learnNormal(timeSeriesTrain)
-
-        var report = simple.detect(timeSeriesAnomalies);
-        for(var size=0; size<report.length(); size++ ){
+        var report = simple.detect(timeSeriesAnomalies,sim);
+        for(var size=0; size<report.length; size++ ){
             result += report[size].description +" "+ report[size].timeStep + "\n"
         }
     }
@@ -27,7 +19,7 @@ function getDetect(mode, train, anomalies){
         var hybrid = HybridAnomaly.constructor()
         hybrid.learnNormal(timeSeriesTrain)
         var report = hybrid.detect(timeSeriesAnomalies);
-        for(var size=0; size<report.length(); size++ ){
+        for(var size=0; size<report.length; size++ ){
             result += report[size].description +" "+ report[size].timeStep + "\n"
         }
     }
@@ -35,16 +27,21 @@ function getDetect(mode, train, anomalies){
 }
 class timeSeries{
     map;
+    len;
 
     constructor( file, ) {
         this.map=timeSeriesBuilder(file);
+        this.len= mapLen(this.map)
     }
     getAttributes(){
-        return this.map.keys
+        var keys = []
+        for(var i=0; i<this.len;i++){
+            keys[i]= this.map[i].key
+        }
+        return keys
     }
     getRowSize(){
-        console.log("keys number = " +this.map.length())
-    return this.map.length()
+    return this.len
     }
     getAttributeData(k){
         return this.map[k].vals
@@ -53,7 +50,7 @@ class timeSeries{
 }
 
 function timeSeriesBuilder(file){
-    var timeSeries={};
+    var timeSeries={}
     //send to the server get the anomalis
     var rows =file.split("\n")
     var feathers = rows[0].split(',')
@@ -73,5 +70,12 @@ function timeSeriesBuilder(file){
         }
     }
     return timeSeries
+}
+function mapLen(map){
+    var len=0;
+    for(var count in map){
+        len++
+    }
+    return len;
 }
 module.exports.getDetect = getDetect

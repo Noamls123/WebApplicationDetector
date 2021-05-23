@@ -1,7 +1,5 @@
 
-var path = require('path')
-const report = require(path.resolve(__dirname,'./AnomalyReport.js'));
-
+const report = require('../model/AnomalyReport');
 class Point{
     x;
     y;
@@ -22,7 +20,7 @@ class CorrelatedFeatures {
     }
 }
 class SimpleAnomalyDetector{
-    cf=new CorrelatedFeatures();
+    cf=[];
     threshold;
 
     constructor() {
@@ -40,8 +38,8 @@ class SimpleAnomalyDetector{
 }
 
 function toPoints(x, y){
-    var ps=new Point*[x.size()];
-    for(var i=0;i<x.size();i++){
+    var ps=[x.length];
+    for(var i=0;i<x.length;i++){
         ps[i]=new Point(x[i],y[i]);
     }
     return ps;
@@ -50,7 +48,7 @@ function toPoints(x, y){
 function findThreshold(ps, len, rl){
     var max=0;
     for(var i=0;i<len;i++){
-        var d=Math.abs(ps[i].y - rl.f(ps[i].x));
+        var d=Math.abs(ps[i].y - rl.getF(ps[i].x));
         if(d>max)
             max=d;
     }
@@ -58,34 +56,35 @@ function findThreshold(ps, len, rl){
 }
 
 
-function learnNormal(ts){
+function learnNormal(ts,sim){
 
     var atts=ts.getAttributes(); // vector
     var len=ts.getRowSize();
-    var vals; // array --> float vals[atts.size()][len]
+    var vals=[]; // array --> float vals[atts.size()][len]
 
-    for(var i=0;i<atts.size();i++){
-        var x=ts.getAttributeData(atts[i]); // vector
-        for(var j=0;j<len;j++){
+    for(var i=0;i<len;i++){
+        var x=ts.getAttributeData(i); // vector
+        vals[i]=[]
+        for(var j=0;j<x.length;j++){
             vals[i][j]=x[j];
         }
     }
 
-    for(var i=0;i<atts.size();i++){
-        var f1=atts[i];
+    for(var i=0;i<atts.length;i++){
+        var f1=i;
         var max=0;
         var jmax=0;
-        for(var j=i+1;j<atts.size();j++){
-            var p=Math.abs(Math.pearson(vals[i],vals[j],len));
+        for(var j=i+1;j<atts.length;j++){
+            var p=Math.abs(pearson(vals[i],vals[j],x.length));
             if(p>max){
                 max=p;
                 jmax=j;
             }
         }
-        var f2=atts[jmax];
+        var f2=jmax;
         var ps=toPoints(ts.getAttributeData(f1),ts.getAttributeData(f2));
 
-        learnHelper(ts,max,f1,f2,ps);
+        learnHelper(x.length,ts,max,f1,f2,ps,sim);
 
         // delete points
         /*for(var k=0;k<len;k++)
@@ -94,29 +93,28 @@ function learnNormal(ts){
     }
 }
 
-function learnHelper(ts, p/*pearson*/, f1, f2, ps){
-    if(p>threshold){
-        var len=ts.getRowSize();
+function learnHelper(len,ts, p/*pearson*/, f1, f2, ps,sim){
+    if(p>sim.threshold){
         var c = new CorrelatedFeatures();
         c.feature1=f1;
         c.feature2=f2;
         c.corrlation=p;
-        c.lin_reg=Math.linear_reg(ps,len);
+        c.lin_reg=linear_reg(ps,len);
         c.threshold=findThreshold(ps,len,c.lin_reg)*1.1; // 10% increase
-        this.cf.add(c);
+        sim.cf.push(c);
     }
 }
 
-function detect(ts){
-    var v; // vector of AnomalyReport
+function detect(ts,sim){
+    var v=[]; // vector of AnomalyReport
 
-    cf.array.forEach(element => {
-        var x=ts.getAttributeData(c.feature1); //vector
-        var y=ts.getAttributeData(c.feature2); //vector
-        for(var i=0;i<x.size();i++){
-            if(isAnomalous(x[i],y[i],c)){
-                var d=c.feature1 + "-" + c.feature2;
-                v.push_back(AnomalyReport(d,(i+1)));
+    sim.cf.forEach(element => {
+        var x=ts.getAttributeData(element.feature1); //vector
+        var y=ts.getAttributeData(element.feature2); //vector
+        for(var i=0;i<x.length;i++){
+            if(isAnomalous(x[i],y[i],element)){
+                var d=ts.map[element.feature1].key + " : " + ts.map[element.feature2].key;
+                v.push(new report.ARConstructor(d,(i+1)));
             }
         }
     });
@@ -124,9 +122,63 @@ function detect(ts){
 }
 
 function isAnomalous(x, y, c){
-    return (Math.abs(y - c.lin_reg.f(x))>c.threshold);
+    return (Math.abs(y - c.lin_reg.getF(x))>c.threshold);
 }
-
-simpleAnomaly.exports.learnNormal = learnNormal
-simpleAnomaly.exports.detect = detect
-simpleAnomaly.exports.SimpleAnomalyDetector.constructor= SimpleAnomalyDetector.constructor
+function pearson(x,y,size){
+    var c = cov(x,y,size)
+    var s= (Math.sqrt(varM(x,size))*Math.sqrt(varM(y,size)))
+    if(s == 0)
+        return 0
+    return cov(x,y,size)/(Math.sqrt(varM(x,size))*Math.sqrt(varM(y,size)))
+}
+function varM(x,size){
+    var sum=0
+    var miu= avg(x,size)
+    for(var i=0;i<size;i++){
+        sum += Math.pow(x[i],2)
+    }
+    return (sum/size)-(Math.pow(miu,2))
+}
+function  cov(x,y,size){
+    var sum=0.0
+    for(var i=0;i<size;i++){
+        sum += x[i]*y[i]
+    }
+    return sum/size - (avg(x,size)*avg(y,size))
+}
+function avg(x,size){
+    var sum=0.0
+    for(var i=0;i<size;i++){
+        sum+=parseFloat(x[i])
+    }
+    return sum/size
+}
+function linear_reg(ps,len){
+    var x=[len]
+    var y=[len]
+    for(var i=0;i<len;i++){
+        x[i] = ps[i].x
+        y[i] = ps[i].y
+    }
+    var v = varM(x,len)
+    if(v == 0){
+        return new Line(0,0)
+    }
+    var a = cov(x,y,len)/varM(x,len)
+    var b = avg(y,len) - a*(avg(x,len))
+    return new Line(a,b)
+}
+class Line{
+    a;
+    b;
+    constructor(x,y) {
+        this.a=x;
+        this.b=y;
+    }
+     getF(x){
+        return this.a*x+this.b
+    }
+}
+module.exports.learnNormal = learnNormal
+module.exports.cfConstructor=SimpleAnomalyDetector
+module.exports.detect=detect
