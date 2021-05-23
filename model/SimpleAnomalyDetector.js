@@ -1,13 +1,7 @@
 
 const report = require('../model/AnomalyReport');
-class Point{
-    x;
-    y;
-    constructor(x, y) {
-        this.x=x;
-        this.y=y;
-    }
-}
+const util = require('../model/utils')
+
 class CorrelatedFeatures {
     feature1;
     feature2;
@@ -40,7 +34,7 @@ class SimpleAnomalyDetector{
 function toPoints(x, y){
     var ps=[x.length];
     for(var i=0;i<x.length;i++){
-        ps[i]=new Point(x[i],y[i]);
+        ps[i]=new util.Point(x[i],y[i]);
     }
     return ps;
 }
@@ -75,7 +69,7 @@ function learnNormal(ts,sim){
         var max=0;
         var jmax=0;
         for(var j=i+1;j<atts.length;j++){
-            var p=Math.abs(pearson(vals[i],vals[j],x.length));
+            var p=Math.abs(util.pearson(vals[i],vals[j],x.length));
             if(p>max){
                 max=p;
                 jmax=j;
@@ -99,7 +93,7 @@ function learnHelper(len,ts, p/*pearson*/, f1, f2, ps,sim){
         c.feature1=f1;
         c.feature2=f2;
         c.corrlation=p;
-        c.lin_reg=linear_reg(ps,len);
+        c.lin_reg=util.linear_reg(ps,len);
         c.threshold=findThreshold(ps,len,c.lin_reg)*1.1; // 10% increase
         sim.cf.push(c);
     }
@@ -107,7 +101,6 @@ function learnHelper(len,ts, p/*pearson*/, f1, f2, ps,sim){
 
 function detect(ts,sim){
     var v=[]; // vector of AnomalyReport
-
     sim.cf.forEach(element => {
         var x=ts.getAttributeData(element.feature1); //vector
         var y=ts.getAttributeData(element.feature2); //vector
@@ -124,61 +117,11 @@ function detect(ts,sim){
 function isAnomalous(x, y, c){
     return (Math.abs(y - c.lin_reg.getF(x))>c.threshold);
 }
-function pearson(x,y,size){
-    var c = cov(x,y,size)
-    var s= (Math.sqrt(varM(x,size))*Math.sqrt(varM(y,size)))
-    if(s == 0)
-        return 0
-    return cov(x,y,size)/(Math.sqrt(varM(x,size))*Math.sqrt(varM(y,size)))
-}
-function varM(x,size){
-    var sum=0
-    var miu= avg(x,size)
-    for(var i=0;i<size;i++){
-        sum += Math.pow(x[i],2)
-    }
-    return (sum/size)-(Math.pow(miu,2))
-}
-function  cov(x,y,size){
-    var sum=0.0
-    for(var i=0;i<size;i++){
-        sum += x[i]*y[i]
-    }
-    return sum/size - (avg(x,size)*avg(y,size))
-}
-function avg(x,size){
-    var sum=0.0
-    for(var i=0;i<size;i++){
-        sum+=parseFloat(x[i])
-    }
-    return sum/size
-}
-function linear_reg(ps,len){
-    var x=[len]
-    var y=[len]
-    for(var i=0;i<len;i++){
-        x[i] = ps[i].x
-        y[i] = ps[i].y
-    }
-    var v = varM(x,len)
-    if(v == 0){
-        return new Line(0,0)
-    }
-    var a = cov(x,y,len)/varM(x,len)
-    var b = avg(y,len) - a*(avg(x,len))
-    return new Line(a,b)
-}
-class Line{
-    a;
-    b;
-    constructor(x,y) {
-        this.a=x;
-        this.b=y;
-    }
-     getF(x){
-        return this.a*x+this.b
-    }
-}
+
 module.exports.learnNormal = learnNormal
 module.exports.cfConstructor=SimpleAnomalyDetector
 module.exports.detect=detect
+module.exports.CorrelatedFeatures = CorrelatedFeatures
+module.exports.SimpleAnomalyDetector = SimpleAnomalyDetector
+module.exports.learnHelper = learnHelper
+module.exports.isAnomalous = isAnomalous

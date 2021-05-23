@@ -1,5 +1,5 @@
 const simple = require('../model/SimpleAnomalyDetector')
-
+const hybrid = require('../model/HybridAnomalyDetector')
 function getDetect(mode, train, anomalies){
     var result="here are the anomalies"
     console.log(result+"\n")
@@ -16,9 +16,9 @@ function getDetect(mode, train, anomalies){
         }
     }
     else{//hybrid
-        var hybrid = HybridAnomaly.constructor()
-        hybrid.learnNormal(timeSeriesTrain)
-        var report = hybrid.detect(timeSeriesAnomalies);
+        var hyb = new hybrid.Constructor()
+        hybrid.learnNormal(timeSeriesTrain,hyb)
+        var report = hybrid.detect(timeSeriesAnomalies,hyb);
         for(var size=0; size<report.length; size++ ){
             result += report[size].description +" "+ report[size].timeStep + "\n"
         }
