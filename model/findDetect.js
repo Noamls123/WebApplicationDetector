@@ -1,8 +1,11 @@
 const simple = require('../model/SimpleAnomalyDetector')
 const hybrid = require('../model/HybridAnomalyDetector')
 function getDetect(mode, train, anomalies){
-    var result="here are the anomalies"
-    console.log(result+"\n")
+    var feature1 = []
+    var feature2 = []
+    var timestep = []
+    var resultArray = []
+    var result="here are the anomalies\n"
     var timeSeriesTrain = new timeSeries(train)
     var timeSeriesAnomalies = new timeSeries(anomalies)
 
@@ -12,7 +15,11 @@ function getDetect(mode, train, anomalies){
 
         var report = simple.detect(timeSeriesAnomalies,sim);
         for(var size=0; size<report.length; size++ ){
-            result += report[size].description +" "+ report[size].timeStep + "\n"
+           // result += report[size].description +" "+ report[size].timeStep + "\n"
+            timestep[size] = report[size].timeStep
+            var fields = report[size].description.split(':')
+            feature1[size] = fields[0]
+            feature2[size] = fields[1]
         }
     }
     else{//hybrid
@@ -20,10 +27,16 @@ function getDetect(mode, train, anomalies){
         hybrid.learnNormal(timeSeriesTrain,hyb)
         var report = hybrid.detect(timeSeriesAnomalies,hyb);
         for(var size=0; size<report.length; size++ ){
-            result += report[size].description +" "+ report[size].timeStep + "\n"
-        }
+            // result += report[size].description +" "+ report[size].timeStep + "\n"
+            timestep[size] = report[size].timeStep
+            var fields = report[size].description.split(':')
+            feature1[size] = fields[0]
+            feature2[size] = fields[1]        }
     }
-    return result
+    resultArray[0] = feature1;
+    resultArray[1] = feature2;
+    resultArray[2] = timestep;
+    return resultArray
 }
 class timeSeries{
     map;

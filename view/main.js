@@ -42,4 +42,3 @@ function updateThumbnail(dropZoneElement,file){
   thumbnailElement.dataset.label=file.name;
 
 }
-

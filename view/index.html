@@ -5,7 +5,19 @@
     <title>Anomaly Detection Server</title>
     <link rel="stylesheet" href="./main.css">
     <style>
+        table{
+            font-family: 'Comic Sans MS';
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
 
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
         * {
             box-sizing: border-box;
         }
@@ -45,7 +57,7 @@
 <br></br>
 
 
-<form action="/upload" method="POST" enctype="multipart/form-data" name="uploafFile" target="result">
+<form action="/upload" method="POST" enctype="multipart/form-data" name="uploadFile" target="result">
 <div class="dropTrain">
     <div class ="drop-zone">
         <span class="drop-zone__prompt">Drop practice files here</span>
@@ -66,9 +78,16 @@
     <headerL>Result:</headerL>
     <br></br>
 
-    <iframe name="result" width="90%" height="90%"></iframe>
-</div>
-</div>
+   <!--<table id="results" name="result">
+        <tr>
+            <th>feature 1</th>
+            <th>feature 2</th>
+            <th>time</th>
+        </tr>
+
+    </table></div>
+    <-->
+    <iframe name="result" width="90%" height="90%"></iframe></div>
 <div class="mode">
     <label class="switch">
         <input type="checkbox" name="reg" class="switch-input" >
