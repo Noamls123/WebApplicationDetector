@@ -67,7 +67,7 @@ function timeSeriesBuilder(file){
     //send to the server get the anomalis
     var rows =file.split("\n")
     var feathers = rows[0].split(',')
-    for(var singleRow = 0 ; singleRow< rows.length;singleRow++) {
+    for(var singleRow = 0 ; singleRow < rows.length;singleRow++) {
         if (singleRow === 0) {
             for (var feather = 0; feather < feathers.length; feather++) {
                 timeSeries[feather] = {

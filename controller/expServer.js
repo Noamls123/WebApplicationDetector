@@ -19,6 +19,7 @@ app.get('/',(req,res)=>{
 
 app.post('/detect', (req, res) => {{
 console.log("this is my req:" ,req.body.mod)
+
     var mode
     if(req.body.mod == "reg") {
         console.log("hiii")
@@ -33,27 +34,20 @@ console.log("this is my req:" ,req.body.mod)
         return
     }
     var train
-    var data= ''
-    var readStream = fs.createReadStream(req.body.train, 'utf8');
-
-    fs.readFileSync(req.body.train,'utf8' , (err, data) => {
-        if (err) {
-            console.error(err)
-            return
-        }
+    try {
+        const data = fs.readFileSync(req.body.train, 'utf8')
         train=data
-        console.log(data)
-    })
-
+    } catch (err) {
+        console.error(err)
+    }
     var anomalies
-    fs.readFileSync(req.body.anomalies,'utf8' , (err, data) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        anomalies=data
-    })
 
+    try {
+        const data = fs.readFileSync(req.body.anomalies, 'utf8')
+        anomalies=data
+    } catch (err) {
+        console.error(err)
+    }
 
     var result = model.getDetect(mode,train,anomalies)
     var dict = []
@@ -87,6 +81,7 @@ app.post("/upload",(req,res)=>{
             var trainFile = req.files.practiceFile
             var detectFile = req.files.detectionFile
             var result = model.getDetect(mode,trainFile.data.toString(),detectFile.data.toString())
+            var save =result
             var dict = []
             for(var i = 0 ; i< result[0].length; i++) {
                 var str = '{' + '"' + result[0][i].toString() + " " + result[1][i].toString() + '" : ' + "[" + result[2][i].toString() + "]" + "}"
@@ -95,6 +90,7 @@ app.post("/upload",(req,res)=>{
         }
         var dictstring = JSON.stringify(dict)
         res.write(dictstring)
+       // res.write(save)
     }
 
     //update()
