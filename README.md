@@ -37,7 +37,7 @@ Use the command: node expServer.js . After that, the server will wait for the de
 Now, you can open a page by the adress 'localhost:8080' or send HTTP POST-command to the 'localhost:8080' adress.
 
 The page that will show after ruuning the program:
-![image]
+![image](https://github.com/Noamls123/WebApplicationDetector/blob/907cc7af1d17ebee8cd70b91639c04d5b04a7f83/web%20screen.png)
 
 
 # UML Chart:
