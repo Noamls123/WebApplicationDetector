@@ -19,6 +19,11 @@ The general parts of the program:
  
  
 # The structure of the folders and the main files of the project
+We used MVC architecture (Model, View, Controller).
+The **Model** folder has the files that implements the anomaly detection algorithms. It returns a JSON file with 
+the anomalies.
+The **Controller** folder implements the server code.
+The **View** folder implements the code for HTML page that will be presented to the user.
 
 
 # Required installation and Preparations
