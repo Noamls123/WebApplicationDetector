@@ -11,9 +11,11 @@ class HybridAnomalyDetector extends simple.SimpleAnomalyDetector {
     }
 
 function toPointsh(x, y){
-    var ps=[x.length];
+    var ps=[];
     for(var i=0;i<x.length;i++){
-        ps[i]=new util.Point(x[i],y[i]);
+        ps[i]={x:parseFloat(x[i]),y:parseFloat(y[i])};
+
+
     }
     return ps;
 }
@@ -55,15 +57,12 @@ function learnNormal(ts,hyb){
 }
 
 function learnHelper(len, ts, p/*pearson*/, f1, f2, ps,hyb) {
-    console.log("start hybris learn helper\n")
 
     simple.learnHelper(len,ts, p, f1, f2, ps,hyb);
     if (p > 0.5 && p < hyb.threshold) {
-        console.log("hybris learn helper\n")
         //var cl = new minCircle(ps,ts.getRowSize());
-        var cl = new minCircle([ps]);
+        var cl =  minCircle(ps);
         // => { x: 10, y: 10, r: 14.142135623730951 }
-
         var c = new simple.CorrelatedFeatures();
         c.feature1 = f1;
         c.feature2 = f2;
@@ -92,7 +91,6 @@ function detect(ts,hyb){
 
 
 function isAnomalous(x, y, c) {
-    console.log("in is anomalous\n")
     return (c.corrlation > 0.5 && c.corrlation < c.threshold && dist(new util.Point(c.cx, c.cy), new util.Point(x, y)) > c.threshold)||
         (c.corrlation >= c.threshold && c.threshold>0.9 && simple.isAnomalous(x, y, c));
 }

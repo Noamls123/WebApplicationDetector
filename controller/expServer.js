@@ -19,18 +19,15 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/detect', (req, res) => {{
-console.log("this is my req:" ,req.body.mod)
-
     var mode
     if(req.body.mod == "reg") {
-        console.log("hiii")
         mode = "Reg"
     }
     else {
         mode = "Hybrid"
     }
     if(!req.body.train.includes(".csv")  || !req.body.anomalies.includes(".csv")){
-        res.write("Invalid file selected, valid files are of .csv");
+        res.write("Invalid file selected\nvalid files are in type .csv");
         res.end()
         return
     }
@@ -74,15 +71,22 @@ app.post("/upload",(req,res)=>{
             var trainFile = req.files.practiceFile
             var detectFile = req.files.detectionFile
             var result = model.getDetect(mode,trainFile.data.toString(),detectFile.data.toString())
-            var dict = buildJson(result)
-            let options = {
-                data: dict,
-                css: '{border: 1px solid red}'
-            };
+            if(result[0][0]) {
+                var dict = buildJson(result)
+                let options = {
+                    data: dict,
+                    css:''
+                };
+
+                let html = html_tablify.tablify(options);
+                res.write(html)
+            }
+            else{
+                res.write("No anomalies found")
+            }
 
            // options.style.textAlign= 'center';
-            let html = html_tablify.tablify(options);
-            res.write(html)
+
         }
     }
 
