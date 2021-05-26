@@ -31,12 +31,12 @@ The general parts of the program:
 6) install 'html tablify'
 
 
-# Running the application
+# Running 
 Open the command-promp and get in the project directory. Then, get in the controller directory.
 Use the command: node expServer.js . After that, the server will wait for the detection files.
 Now, you can open a page by the adress 'localhost:8080' or send HTTP POST-command to the 'localhost:8080' adress.
 
-The page that will show after ruuning the program:
+The page that will show after ruuning:
 ![image](https://github.com/Noamls123/WebApplicationDetector/blob/907cc7af1d17ebee8cd70b91639c04d5b04a7f83/web%20screen.png)
 
 
