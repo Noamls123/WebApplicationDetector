@@ -14,8 +14,6 @@ function toPointsh(x, y){
     var ps=[];
     for(var i=0;i<x.length;i++){
         ps[i]={x:parseFloat(x[i]),y:parseFloat(y[i])};
-
-
     }
     return ps;
 }
@@ -91,8 +89,9 @@ function detect(ts,hyb){
 
 
 function isAnomalous(x, y, c) {
-    return (c.corrlation > 0.5 && c.corrlation < c.threshold && dist(new util.Point(c.cx, c.cy), new util.Point(x, y)) > c.threshold)||
-        (c.corrlation >= c.threshold && c.threshold>0.9 && simple.isAnomalous(x, y, c));
+    var d=dist(new util.Point(c.cx, c.cy), new util.Point(x, y))
+    return (c.corrlation > 0.5 && c.corrlation < c.threshold && d > c.threshold) ||
+        (c.lin_reg && c.corrlation >= c.threshold && simple.isAnomalous(x, y, c));
 }
 
 function dist(p1,p2){

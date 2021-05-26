@@ -7,4 +7,8 @@ class AnomalyReport{
     }
 }
 
+/*class TimeSeriesAnomalyDetector {
+    learnNormal(ts);
+    detect(ts);
+};*/
 module.exports.ARConstructor=AnomalyReport
