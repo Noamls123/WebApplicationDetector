@@ -36,6 +36,9 @@ Open the command-promp and get in the project directory. Then, get in the contro
 Use the command: node expServer.js . After that, the server will wait for the detection files.
 Now, you can open a page by the adress 'localhost:8080' or send HTTP POST-command to the 'localhost:8080' adress.
 
+The page that will show after ruuning the program:
+![image](https://user-images.githubusercontent.com/73317511/114721566-b6308400-9d41-11eb-870a-721e75846763.png)
+
 
 # UML Chart:
 Press [here](https://github.com/Noamls123/WebApplicationDetector/blob/main/Selected.png) to get the UML of the main classes.
