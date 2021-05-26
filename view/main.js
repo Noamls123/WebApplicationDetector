@@ -43,5 +43,7 @@ function updateThumbnail(dropZoneElement,file){
 
 }
 function CreateTableFromJSON(){
-    
+
 }
+
+

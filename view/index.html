@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/2.1.0/json2html.min.js"></script>
+<link rel="icon" href="picture/icon.png" type='image/x-icon'/>
 <head>
     <meta charset="UTF-8">
     <title>Anomaly Detection Server</title>
@@ -21,23 +23,32 @@
         * {
             box-sizing: border-box;
         }
-        .res {
+
+        .leftSide{
+            width: 40%;
+            height: 600px;
+            float: right;
+            padding: 15px;
+            border: 1px solid white;
+        }
+        .rightSide{
             width: 60%;
+            height: 600px;
             float: left;
             padding: 15px;
             border: 1px solid white;
-         }
+            background-color: cadetblue;
+        }
         .dropTrain {
-
-            width: 15%;
-            height: 15%;
+            width: 50%;
+            height: 50%;
             float: left;
             padding: 15px;
             border: 1px solid white;
         }
         .dropAnomaly{
-            width: 15%;
-            height: 15%;
+            width: 50%;
+            height: 50%;
             float: left;
             padding: 15px;
             border: 1px solid white;
@@ -49,54 +60,52 @@
             padding: 15px;
             border: 1px solid white;
         }
+        .res{
+            width: 100%;
+            height: 100%;
+            float: left;
+            padding: 15px;
+        }
+
        </style>
-    <header>Anomaly Detection Server</header>
+    <header>Anomaly Detection Server<img src="picture/plane.png" width="100" height="100" alt="" style="vertical-align:middle"/>
+    </header>
 </head>
 
 <body>
-<br></br>
-
 
 <form action="/upload" method="POST" enctype="multipart/form-data" name="uploadFile" target="result">
-<div class="dropTrain">
-    <div class ="drop-zone">
-        <span class="drop-zone__prompt">Drop practice files here</span>
-        <input type="file"  name="practiceFile" class="drop-zone__input " >
-    </div>
-    </div>
-<div class="dropAnomaly">
-    <div class ="drop-zone">
-        <span class="drop-zone__prompt">Drop detection files here</span>
-        <input type="file"  name="detectionFile" class="drop-zone__input">
+<div class="rightSide">
+    <div class="res" >
+    <iframe name="result" width="100%" height="100%" class="result-table"></iframe>
     </div>
 </div>
+    <div class="leftSide">
+    <div class="dropTrain">
+        <div class ="drop-zone">
+            <span class="drop-zone__prompt">Drop practice files here</span>
+            <input type="file"  name="practiceFile" class="drop-zone__input " >
+        </div>
+    </div>
+    <div class="dropAnomaly">
+        <div class ="drop-zone">
+            <span class="drop-zone__prompt">Drop detection files here</span>
+            <input type="file"  name="detectionFile" class="drop-zone__input">
+        </div>
+    </div>
+
+    <div class="mode">
+        <label class="switch">
+            <input type="checkbox" name="reg" class="switch-input" >
+            <span class="switch-label" data-on="hybrid mode" data-off="regression mode"></span>
+            <span class="switch-handle"></span>
+        </label>
+        <br> </br>
+        <button class="send-button" onclick="send_upload()"> upload</button>
+    </div>
+    </div>
 
 
-
-<div class="res">
-
-    <headerL>Result:</headerL>
-    <br></br>
-
-   <table id="result" name="result">
-        <tr>
-            <th>feature 1</th>
-            <th>feature 2</th>
-            <th>time</th>
-        </tr>
-
-    </table></div>
-
-    <!--iframe name="result" width="90%" height="90%"></--iframe></div><-->
-<div class="mode">
-    <label class="switch">
-        <input type="checkbox" name="reg" class="switch-input" >
-        <span class="switch-label" data-on="hybrid mode" data-off="regression mode"></span>
-        <span class="switch-handle"></span>
-    </label>
-    <br> </br>
-    <button class="send-button" onclick="send_upload()"> upload</button>
-</div>
 <script src="main.js"></script>
 </form>
 

@@ -1,5 +1,6 @@
 const express = require('express')
 const fileUpload = require('express-fileupload')
+var html_tablify = require('html-tablify');
 const model = require('../model/findDetect')
 const fs = require('fs')
 
@@ -50,13 +51,7 @@ console.log("this is my req:" ,req.body.mod)
     }
 
     var result = model.getDetect(mode,train,anomalies)
-    var dict = []
-    for(var i = 0 ; i< result[0].length; i++) {
-        var str = '{' + '"' + result[0][i].toString() + " " + result[1][i].toString() + '" : ' + "[" + result[2][i].toString() + "]" + "}"
-        dict.push(str)
-    }
-
-    var dictstring = JSON.stringify(dict)
+    var dict = buildJson(result)
     res.send(JSON.stringify(dict))
 
 }
@@ -64,11 +59,9 @@ console.log("this is my req:" ,req.body.mod)
 app.post("/upload",(req,res)=>{
     var mode
     if(req.body.reg == "on"){
-    res.write("detectMode is: Hybrid\n")
     mode = "Hybrid"
     }
     else{
-        res.write("detectMode is: Regression\n")
         mode = "Reg"
     }
     if(req.files){
@@ -81,22 +74,29 @@ app.post("/upload",(req,res)=>{
             var trainFile = req.files.practiceFile
             var detectFile = req.files.detectionFile
             var result = model.getDetect(mode,trainFile.data.toString(),detectFile.data.toString())
-            var save =result
-            var dict = []
-            for(var i = 0 ; i< result[0].length; i++) {
-                var str = '{' + '"' + result[0][i].toString() + " " + result[1][i].toString() + '" : ' + "[" + result[2][i].toString() + "]" + "}"
-                dict.push(str)
-            }
+            var dict = buildJson(result)
+            let options = {
+                data: dict,
+                css: '{border: 1px solid red}'
+            };
+
+           // options.style.textAlign= 'center';
+            let html = html_tablify.tablify(options);
+            res.write(html)
         }
-        var dictstring = JSON.stringify(dict)
-        res.write(dictstring)
-       // res.write(save)
     }
 
     //update()
     res.end()
 })
-
+function buildJson(text){
+    var dict = []
+    for(var i = 0 ; i< text[0].length; i++) {
+        var obj = { time: text[2][i].toString(),feature1: text[0][i].toString(), feature2: text[1][i].toString() }
+        dict.push(obj)
+    }
+    return dict
+}
 /*function update() {
    var f1="ail", f2="elv",time="600
     //for(){

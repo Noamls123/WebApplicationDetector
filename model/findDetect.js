@@ -3,39 +3,32 @@ const hybrid = require('../model/HybridAnomalyDetector')
 function getDetect(mode, train, anomalies){
     var feature1 = []
     var feature2 = []
-    var timestep = []
+    var timeStep = []
     var resultArray = []
-    var result="here are the anomalies\n"
     var timeSeriesTrain = new timeSeries(train)
     var timeSeriesAnomalies = new timeSeries(anomalies)
 
     if(mode == "Reg"){ //simple
         var sim =  new simple.cfConstructor()
         simple.learnNormal(timeSeriesTrain,sim)
-
         var report = simple.detect(timeSeriesAnomalies,sim);
-        for(var size=0; size<report.length; size++ ){
-           // result += report[size].description +" "+ report[size].timeStep + "\n"
-            timestep[size] = report[size].timeStep
-            var fields = report[size].description.split(':')
-            feature1[size] = fields[0]
-            feature2[size] = fields[1]
-        }
+
     }
     else{//hybrid
         var hyb = new hybrid.Constructor()
         hybrid.learnNormal(timeSeriesTrain,hyb)
         var report = hybrid.detect(timeSeriesAnomalies,hyb);
-        for(var size=0; size<report.length; size++ ){
-            // result += report[size].description +" "+ report[size].timeStep + "\n"
-            timestep[size] = report[size].timeStep
-            var fields = report[size].description.split(':')
-            feature1[size] = fields[0]
-            feature2[size] = fields[1]        }
+
+    }
+    for(var size=0; size<report.length; size++ ){
+        timeStep[size] = report[size].timeStep
+        var fields = report[size].description.split(':')
+        feature1[size] = fields[0]
+        feature2[size] = fields[1]
     }
     resultArray[0] = feature1;
     resultArray[1] = feature2;
-    resultArray[2] = timestep;
+    resultArray[2] = timeStep;
     return resultArray
 }
 class timeSeries{
@@ -64,7 +57,7 @@ class timeSeries{
 
 function timeSeriesBuilder(file){
     var timeSeries={}
-    //send to the server get the anomalis
+    //send to the server get the anomalies
     var rows =file.split("\n")
     var feathers = rows[0].split(',')
     for(var singleRow = 0 ; singleRow < rows.length;singleRow++) {

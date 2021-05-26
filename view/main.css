@@ -67,7 +67,7 @@ li{
     margin: 50px auto;
     width: 160px;
     text-align: center;
-    background-color: #f2f2f2;
+
 }
 .container > .switch {
     display: block;
@@ -189,4 +189,7 @@ li{
 
 .switch-green > .switch-input:checked ~ .switch-label {
     background: #4fb845;
+}
+.result-table{
+    border: 1px solid white;
 }
