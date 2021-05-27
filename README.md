@@ -45,7 +45,7 @@ Now, there are two option:
 In the http POST command enter to the mod argument "reg"- for the regression algorithm and "hybrid"-for the hybrid algorithm, to the train argument the path of the file you would like to learn and to the anomalies the path to the file you would like to detect.
 At this option you will get JSON with the anomalies.
 
-The page that will show after ruuning:
+The page that will show after openning a page by the adress above:
 ![image](https://github.com/Noamls123/WebApplicationDetector/blob/907cc7af1d17ebee8cd70b91639c04d5b04a7f83/web%20screen.png)
 
 
