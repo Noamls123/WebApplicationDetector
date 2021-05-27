@@ -44,39 +44,47 @@ function updateThumbnail(dropZoneElement,file){
 }
 
     function showTable(){
-
         let list = document.getElementById('result').contentDocument.firstChild.textContent;
         if(list) {
+            let json = JSON.parse(list)
 
             let container = document.getElementById('container')
             container.innerHTML = ""
 
-            let json = JSON.parse(list)
-
             let table = document.createElement('table')
             let tbody = document.createElement('tbody')
-
-            let tr = document.createElement('tr')
-            let td1 = document.createElement('td')
-            td1.textContent = "Time"
-            let td2 = document.createElement('td')
-            td2.textContent = "Feature 1"
-            let td3 = document.createElement('td')
-            td3.textContent = "Feature 2"
-            tr.appendChild(td1)
-            tr.appendChild(td2)
-            tr.appendChild(td3)
-
-            tbody.appendChild(tr)
-            for (let i = 0; i < json.length; i++) {
-                let arr = [json[i].time, json[i].feature1, json[i].feature2]
-                let tr = document.createElement('tr')
-                for (let j = 0; j < 3; j++) {
+            if(json[0].time == "Invalid file, please input csv files!"){
+                    let tr = document.createElement('tr')
                     let td = document.createElement('td')
-                    td.textContent = arr[j]
-                    tr.appendChild(td)
+                    td.textContent = json[0].time
+                    tr.appendChild(td);
+                    tbody.appendChild(tr)
                 }
+            else {
+                let tr = document.createElement('tr')
+                let td1 = document.createElement('td')
+                td1.textContent = "Time"
+                let td2 = document.createElement('td')
+                td2.textContent = "Feature 1"
+                let td3 = document.createElement('td')
+                td3.textContent = "Feature 2"
+                tr.appendChild(td1)
+                tr.appendChild(td2)
+                tr.appendChild(td3)
+
                 tbody.appendChild(tr)
+                if(json[0].time != ""){
+                for (let i = 0; i < json.length; i++) {
+                    let arr = [json[i].time, json[i].feature1, json[i].feature2]
+                    let tr = document.createElement('tr')
+                    for (let j = 0; j < arr.length; j++) {
+                        let td = document.createElement('td')
+                        td.textContent = arr[j]
+                        tr.appendChild(td)
+                    }
+                    tbody.appendChild(tr)
+                }
+                }
             }
             table.appendChild(tbody)
             container.appendChild(table)

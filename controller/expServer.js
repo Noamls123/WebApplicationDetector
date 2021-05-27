@@ -24,7 +24,7 @@ app.post('/detect', (req, res) => {{
         mode = "Hybrid"
     }
     if(!req.body.train.includes(".csv")  || !req.body.anomalies.includes(".csv")){
-        res.write("Invalid file selected\nvalid files are in type .csv");
+        res.write("Invalid file, please input csv files!");
         res.end()
         return
     }
@@ -60,8 +60,9 @@ app.post("/upload",(req,res)=>{
     if(req.files){
         if(req.files.practiceFile&&req.files.detectionFile) {
             if (!req.files.detectionFile.name.includes(".csv") || !req.files.practiceFile.name.includes(".csv")) {
-                res.write("Invalid file selected, valid files are of .csv");
-                res.end()
+                var obj = {time:"Invalid file, please input csv files!",feature1: "", feature2: ""}
+                var dict=[obj]
+                res.send(JSON.stringify(dict))
                 return
             }
             var trainFile = req.files.practiceFile
@@ -72,7 +73,9 @@ app.post("/upload",(req,res)=>{
                 res.send(JSON.stringify(dict))
             }
             else{
-                res.write("No anomalies found")
+                var obj = {time:"" ,feature1:"",feature2:""}
+                var dict=[obj]
+                res.send(JSON.stringify(dict))
             }
         }
 
