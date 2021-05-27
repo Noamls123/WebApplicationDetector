@@ -20,15 +20,6 @@ class SimpleAnomalyDetector{
     constructor() {
         this.threshold=0.9;
     }
-
-
-    setCorrelationThreshold(threshold){
-        this.threshold=threshold;
-    }
-
-    getNormalModel(){
-        return cf;
-    }
 }
 
 function toPoints(x, y){
@@ -79,11 +70,6 @@ function learnNormal(ts,sim){
         var ps=toPoints(ts.getAttributeData(f1),ts.getAttributeData(f2));
 
         learnHelper(x.length,ts,max,f1,f2,ps,sim);
-
-        // delete points
-        /*for(var k=0;k<len;k++)
-            delete ps[k];
-        delete ps;*/
     }
 }
 

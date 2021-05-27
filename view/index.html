@@ -5,6 +5,22 @@
     <title>Anomaly Detection Server</title>
     <link rel="stylesheet" href="./main.css">
     <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px  #FFF0AB;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            opacity: 0.75;
+            background-color: #FFF0AB;
+        }
         * {
             box-sizing: border-box;
         }
@@ -58,9 +74,11 @@
 <body>
 
 <form action="/upload" method="POST" enctype="multipart/form-data" name="uploadFile" target="result">
-<div class="rightSide" style="background-image: url('/picture/sky.jpg');">
-    <div class="res" >
-    <iframe name="result" width="100%" height="100%" class="result-table"></iframe>
+<div class="rightSide" style="background-image: url('/picture/sky.jpg');" >
+    <div class="res">
+    <p id="container" align="center" ></p>
+    <iframe name="result" id="result" onload="showTable()" style="border:none"></iframe>
+
     </div>
 </div>
     <div class="leftSide">

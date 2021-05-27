@@ -1,10 +1,7 @@
 const express = require('express')
 const fileUpload = require('express-fileupload')
-var html_tablify = require('html-tablify');
 const model = require('../model/findDetect')
 const fs = require('fs')
-
-
 const app = express()
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -50,7 +47,6 @@ app.post('/detect', (req, res) => {{
     var result = model.getDetect(mode,train,anomalies)
     var dict = buildJson(result)
     res.send(JSON.stringify(dict))
-
 }
 })
 app.post("/upload",(req,res)=>{
@@ -62,35 +58,25 @@ app.post("/upload",(req,res)=>{
         mode = "Reg"
     }
     if(req.files){
-        if(req.files.practiceFile&&req.files.detectionFile){
-            if(!req.files.detectionFile.name.includes(".csv")  || !req.files.practiceFile.name.includes(".csv")){
+        if(req.files.practiceFile&&req.files.detectionFile) {
+            if (!req.files.detectionFile.name.includes(".csv") || !req.files.practiceFile.name.includes(".csv")) {
                 res.write("Invalid file selected, valid files are of .csv");
                 res.end()
                 return
             }
             var trainFile = req.files.practiceFile
             var detectFile = req.files.detectionFile
-            var result = model.getDetect(mode,trainFile.data.toString(),detectFile.data.toString())
-            if(result[0][0]) {
+            var result = model.getDetect(mode, trainFile.data.toString(), detectFile.data.toString())
+            if (result[0][0]) {
                 var dict = buildJson(result)
-                let options = {
-                    data: dict,
-                    css:''
-                };
-
-                let html = html_tablify.tablify(options);
-                res.write(html)
+                res.send(JSON.stringify(dict))
             }
             else{
                 res.write("No anomalies found")
             }
-
-           // options.style.textAlign= 'center';
-
         }
-    }
 
-    //update()
+    }
     res.end()
 })
 function buildJson(text){
@@ -101,10 +87,5 @@ function buildJson(text){
     }
     return dict
 }
-/*function update() {
-   var f1="ail", f2="elv",time="600
-    //for(){
-        $("<tr><td>" + f1 + "</td><td>" + f2 + "</td><td>" + time + "</td></tr>").appendTo("#results")
-   // }
-}*/
+
 app.listen(8080)

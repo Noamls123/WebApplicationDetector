@@ -1,5 +1,4 @@
 function pearson(x,y,size){
-    var c = cov(x,y,size)
     var s= (Math.sqrt(varM(x,size))*Math.sqrt(varM(y,size)))
     if(s == 0)
         return 0

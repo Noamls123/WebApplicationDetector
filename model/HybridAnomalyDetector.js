@@ -46,11 +46,6 @@ function learnNormal(ts,hyb){
         var ps=toPointsh(ts.getAttributeData(f1),ts.getAttributeData(f2));
 
         learnHelper(x.length,ts,max,f1,f2,ps,hyb);
-
-        // delete points
-        /*for(var k=0;k<len;k++)
-            delete ps[k];
-        delete ps;*/
     }
 }
 
