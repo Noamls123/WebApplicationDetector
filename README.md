@@ -41,7 +41,7 @@ Run the server from the work environment or according to the following instructi
 Open the command-promp and get in the project directory. Then, get in the controller directory.
 Use the command: node expServer.js . After that, the server will wait for consumers.
 Now, there are two option:
-- You can open a page by the adress 'localhost:8080' and upload the csv files. 
+- You can open a page by the adress 'localhost:8080' and upload the csv files. At this option the anomalies will appear at the left side of the page.
 - Send an HTTP POST-command to the 'localhost:8080' adress.
 In the http POST command enter to the mod argument "reg"-for the regression algorithm and "hybrid"-for the hybrid algorithm, to the train argument the path of the file you would like to learn and to the anomalies the path to the file you would like to detect.
 At this option you will get JSON with the anomalies.
