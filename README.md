@@ -39,6 +39,7 @@ The **View** folder implements the code for HTML page that will be presented to 
 Open the command-promp and get in the project directory. Then, get in the controller directory.
 Use the command: node expServer.js . After that, the server will wait for the detection files.
 Now, you can open a page by the adress 'localhost:8080' or send HTTP POST-command to the 'localhost:8080' adress.
+In the http POST command enter to the mod argument"reg"- for the regression algorithm and "hybrid"-for the hybrid algorithm, to the train argument the path of the file you would like to learn and to the anomalies the path to the file you would like to detect.
 
 The page that will show after ruuning:
 ![image](https://github.com/Noamls123/WebApplicationDetector/blob/907cc7af1d17ebee8cd70b91639c04d5b04a7f83/web%20screen.png)
@@ -48,7 +49,7 @@ The page that will show after ruuning:
 Press [here](https://github.com/Noamls123/WebApplicationDetector/blob/main/Selected.png) to get the UML of the main classes.
 
 # Explanation Video:
-Press [here](https://www.youtube.com/watch?v=b7HzdlstRJA) to see our video explanation
+Press [here]() to see our video explanation
 
 # Collaborators
 This program was developed by Shaked Arel, Ruth Lofsky, Hadassa Danesh and Noam Sery Levi.
