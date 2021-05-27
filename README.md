@@ -49,7 +49,7 @@ The page that will show after ruuning:
 Press [here](https://github.com/Noamls123/WebApplicationDetector/blob/main/Selected.png) to get the UML of the main classes.
 
 # Explanation Video:
-Press [here]() to see our video explanation
+Press [here](https://youtu.be/2H2qLyv2560) to see our video explanation
 
 # Collaborators
 This program was developed by Shaked Arel, Ruth Lofsky, Hadassa Danesh and Noam Sery Levi.
