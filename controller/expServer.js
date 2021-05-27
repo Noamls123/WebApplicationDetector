@@ -20,7 +20,7 @@ app.post('/detect', (req, res) => {{
     if(req.body.mod == "reg") {
         mode = "Reg"
     }
-    else {
+    else if (req.body.mod == "hybrid"){
         mode = "Hybrid"
     }
     if(!req.body.train.includes(".csv")  || !req.body.anomalies.includes(".csv")){
